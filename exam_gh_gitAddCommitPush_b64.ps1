@@ -49,7 +49,7 @@ Write-Output "DEBUG: sha='$sha'"
 # Execute gh api
 $resp = gh api @args 2>&1 | Out-String
 $exitCode = $LASTEXITCODE
-nif ($exitCode -ne 0) {
+if ($exitCode -ne 0) {
     Write-Error "gh api failed (exit $exitCode): $resp"
     exit $exitCode
 }

@@ -30,7 +30,8 @@ try {
 $b64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($content))
 
 # Fetch existing remote sha (if any)
-$sha = $nullntry {
+$sha = $null
+try {
     $shaRaw = gh api "repos/$owner/$repo/contents/$path?ref=$branch" --jq '.sha' 2>$null | Out-String
     $shaRaw = $shaRaw.Trim().Trim('"')
     if ($shaRaw -and $shaRaw -ne 'null' -and $shaRaw -match '^[0-9a-f]{40}$') { $sha = $shaRaw }

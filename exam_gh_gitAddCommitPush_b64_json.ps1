@@ -30,7 +30,7 @@ try {
 
 # Fetch existing remote sha (if any)
 $sha = $null
-$fetch = gh api "repos/$owner/$repo/contents/$path?ref=$branch" 2>&1 | Out-String
+$fetch = gh api "repos/$owner/$repo/contents/$($path)?ref=$branch" 2>&1 | Out-String
 try { $obj = $fetch | ConvertFrom-Json } catch { $obj = $null }
 if ($obj -and $obj.sha) { $sha = $obj.sha }
 
@@ -51,11 +51,11 @@ $exit = $LASTEXITCODE
 # If server rejects due to missing sha, try to refetch sha and retry once
 if ($exit -ne 0) {
     Write-Output "DEBUG: initial upload failed (exit $exit). Response: $resp"
-    if ($resp -match '\"sha\" wasn''t supplied' -or $resp -match 'sha wasn''t supplied') {
+    if ($resp -match '"sha" wasn''t supplied' -or $resp -match 'sha wasn''t supplied') {
         Write-Output 'DEBUG: server requires sha — refetching and retrying once.'
         $sha = $null
         for ($attempt=1; $attempt -le 5; $attempt++) {
-            $fetch = gh api "repos/$owner/$repo/contents/$path?ref=$branch" 2>&1 | Out-String
+            $fetch = gh api "repos/$owner/$repo/contents/$($path)?ref=$branch" 2>&1 | Out-String
             try { $obj = $fetch | ConvertFrom-Json } catch { $obj = $null }
             if ($obj -and $obj.sha -and ($obj.sha -match '^[0-9a-f]{40}$')) { $sha = $obj.sha; break }
             Start-Sleep -Milliseconds (200 * $attempt)

@@ -1,0 +1,36 @@
+# git
+.git/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+logs/
+backup/
+
+# Data
+data/
+certs/
+
+# bak txt copy lnk
+*.bak
+*.txt
+*.copy
+*.lnk
+*副本*.*
+**/*副本*.*
+**/*副本*
+*copy*.*
+**/*copy*.*
+**/*copy*
+
+# other
+gh-cli-README.md
+git_run_helpers.ps1

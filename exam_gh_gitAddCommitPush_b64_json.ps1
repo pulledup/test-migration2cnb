@@ -28,15 +28,11 @@ try {
     exit 4
 }
 
-# Fetch existing remote sha (if any) using --jq --silent to avoid extra output
+# Fetch existing remote sha (if any)
 $sha = $null
-try {
-    $shaRaw = gh api "repos/$owner/$repo/contents/$path?ref=$branch" --jq '.sha' --silent 2>$null | Out-String
-    $sha = $shaRaw.Trim().Trim('"')
-    if (-not ($sha -match '^[0-9a-f]{40}$')) { $sha = $null }
-} catch {
-    # ignore - will create if not present
-}
+$fetch = gh api "repos/$owner/$repo/contents/$path?ref=$branch" 2>&1 | Out-String
+try { $obj = $fetch | ConvertFrom-Json } catch { $obj = $null }
+if ($obj -and $obj.sha) { $sha = $obj.sha }
 
 $message = "update $path at $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
 
